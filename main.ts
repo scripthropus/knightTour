@@ -38,5 +38,29 @@ function knightMoves(pos: Position): Position[] {
     });
 }
 
-console.log(knightMoves(knight).map(knightMoves).map(moves => moves.map(knightMoves)));
+function makeTour(steps: number, startPos: Position){
+    const tour: Position[] = [startPos];
+
+    while(tour.length < steps){
+        const currentPos = tour[tour.length -1];
+        const possibleMoves = knightMoves(currentPos).filter(move => !tour.includes(move));
+
+        if(possibleMoves.length === 0){ break; }
+
+        const rand = Math.floor(Math.random()*possibleMoves.length);
+        const nextMove = possibleMoves[rand];
+
+        const futureMovesAvailable = knightMoves(nextMove)
+        .some(move => !tour.includes(move) && move !== nextMove)
+
+        if(!futureMovesAvailable) { continue; }
+        
+        tour.push(nextMove);
+    }
+
+    return tour;
+
+}
+
+console.log(makeTour(15, "b3"));
  
