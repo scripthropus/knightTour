@@ -1,0 +1,27 @@
+.chessBoard {
+    width: 80vh;
+    height: 80vh;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.square {
+    width: 12.5%;
+    height: 12.5%;
+    font-family: sans-serif;
+    font-size: large;
+}
+
+.white {
+    background-color: #f0d9b5;
+    color: #b58863;
+}
+
+.black {
+    background-color: #b58863;
+    color: #f0d9b5;
+}
+
+.selectedSquare {
+    background-color: #7e8c62;
+}
