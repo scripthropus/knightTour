@@ -8,8 +8,13 @@ export const ChessBoard = () => {
 	const [selectedSquare, setSelectedSquare] = useState<Position | null>(null);
 	const [possibleMoves, setPossibleMoves] = useState<Position[]>([]);
 	const handleClick = (squareId: Position) => {
-		setSelectedSquare(squareId);
-		setPossibleMoves(knightMoves(squareId));
+		if (!selectedSquare || possibleMoves.includes(squareId)) {
+			setSelectedSquare(squareId);
+			setPossibleMoves(knightMoves(squareId));
+		} else {
+			setSelectedSquare(null);
+			setPossibleMoves([]);
+		}
 	};
 	return (
 		<div className="chessBoard">
