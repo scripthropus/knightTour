@@ -1,10 +1,9 @@
+export type Position = `${Files}${Ranks}`;
+
 type Files = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 type FileIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type Ranks = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-export type Position = `${Files}${Ranks}`;
 type knightMove = readonly [FileIndex, Ranks];
-
-const knight: Position = "a1";
 
 const files: Files[] = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
 const ranks: Ranks[] = [1, 2, 3, 4, 5, 6, 7, 8] as const;
