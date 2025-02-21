@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { type Position, knightMoves } from "./main";
 import { TourButton } from "./TourButton";
+import { type Position, knightMoves } from "./main";
 import "./chessBoard.css";
 
 export const ChessBoard = () => {
@@ -19,36 +19,36 @@ export const ChessBoard = () => {
 		}
 	};
 	const handleTourGenerated = (tour: Position[]) => {
-    setCurrentTour(tour);
-    // 最初の位置を選択状態にする
-    if (tour.length > 0) {
-      setSelectedSquare(tour[0]);
-      setPossibleMoves(knightMoves(tour[0]));
-    }
-  };
+		setCurrentTour(tour);
+		// 最初の位置を選択状態にする
+		if (tour.length > 0) {
+			setSelectedSquare(tour[0]);
+			setPossibleMoves(knightMoves(tour[0]));
+		}
+	};
 	return (
 		<>
-		<TourButton onTourGenerated={handleTourGenerated}/>
-		<div className="chessBoard">
-			{ranks.map((rank) =>
-				files.map((file, fileIndex) => {
-					const isWhite = (rank + fileIndex) % 2 === 0;
-					const squareId = `${file}${rank}` as Position;
-					const isSelected = selectedSquare === squareId;
-					const isPossibleMove = possibleMoves.includes(squareId);
+			<TourButton onTourGenerated={handleTourGenerated} />
+			<div className="chessBoard">
+				{ranks.map((rank) =>
+					files.map((file, fileIndex) => {
+						const isWhite = (rank + fileIndex) % 2 === 0;
+						const squareId = `${file}${rank}` as Position;
+						const isSelected = selectedSquare === squareId;
+						const isPossibleMove = possibleMoves.includes(squareId);
 
-					return (
-						<div
-							key={squareId}
-							className={`square ${isSelected ? "selectedSquare" : isWhite ? "white" : "black"} ${isPossibleMove ? "possibleMove" : ""}`}
-							onClick={() => handleClick(squareId)}
-						>
-							{squareId}
-						</div>
-					);
-				}),
-			)}
-		</div>
-	</>
+						return (
+							<div
+								key={squareId}
+								className={`square ${isSelected ? "selectedSquare" : isWhite ? "white" : "black"} ${isPossibleMove ? "possibleMove" : ""}`}
+								onClick={() => handleClick(squareId)}
+							>
+								{squareId}
+							</div>
+						);
+					}),
+				)}
+			</div>
+		</>
 	);
 };

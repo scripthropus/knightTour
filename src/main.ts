@@ -69,5 +69,3 @@ export function makeTour(steps: number, startPos: Position) {
 
 	return tour;
 }
-
-console.log(makeTour(15, "b3"));
