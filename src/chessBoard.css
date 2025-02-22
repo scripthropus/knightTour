@@ -30,6 +30,10 @@
 	background-color: #7e8c62;
 }
 
+.vacant {
+	background-color: #101725;
+}
+
 .possibleMove::after {
 	content: "";
 	display: block;

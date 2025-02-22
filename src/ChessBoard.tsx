@@ -40,7 +40,7 @@ export const ChessBoard = () => {
 						return (
 							<div
 								key={squareId}
-								className={`square ${isSelected ? "selectedSquare" : isWhite ? "white" : "black"} ${isPossibleMove ? "possibleMove" : ""}`}
+								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove ? "possibleMove" : ""} ${currentTour.includes(squareId) ? "" : "vacant"}`}
 								onClick={() => handleClick(squareId)}
 							>
 								{squareId}
