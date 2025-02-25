@@ -1,11 +1,11 @@
 import "./App.css";
-import { ChessBoard } from "./ChessBoard.tsx";
+import { KnightTour } from "./KnightTour.tsx";
 
 const App = () => {
 	return (
-		<div>
-			<ChessBoard />
-		</div>
+		<>
+			<KnightTour />
+		</>
 	);
 };
 

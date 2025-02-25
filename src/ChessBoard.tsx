@@ -1,47 +1,75 @@
-import { useState } from "react";
-import { TourButton } from "./TourButton";
+import { useEffect, useState } from "react";
 import { type Position, knightMoves } from "./main";
 import "./chessBoard.css";
 
-export const ChessBoard = () => {
+type ChessBoardProps = {
+	generatedTour: Position[];
+};
+
+export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 	const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 	const ranks = [1, 2, 3, 4, 5, 6, 7, 8].reverse();
-	const [selectedSquare, setSelectedSquare] = useState<Position | null>(null);
-	const [possibleMoves, setPossibleMoves] = useState<Position[]>([]);
-	const [currentTour, setCurrentTour] = useState<Position[]>([]);
-	const handleClick = (squareId: Position) => {
-		if (!selectedSquare || possibleMoves.includes(squareId)) {
-			setSelectedSquare(squareId);
-			setPossibleMoves(knightMoves(squareId));
-		} else {
-			setSelectedSquare(null);
-			setPossibleMoves([]);
+	const [currentPosition, setCurrentPosition] = useState<Position>(
+		generatedTour[0],
+	);
+	const [validMoves, setValidMoves] = useState<Position[]>([]);
+	const [visitedSquares, setVisitedSquares] = useState<Position[]>([
+		generatedTour[0],
+	]);
+
+	useEffect(() => {
+		// generatedTourが更新されたときに状態をリセット
+		setCurrentPosition(generatedTour[0]);
+		setValidMoves(
+			knightMoves(generatedTour[0]).filter((move) =>
+				generatedTour.includes(move),
+			),
+		);
+		setVisitedSquares([generatedTour[0]]);
+	}, [generatedTour]); // generatedTourが変更されたときにリセット
+
+	useEffect(() => {
+		// currentPositionが変わるたびにvalidMovesを更新
+		setValidMoves(
+			knightMoves(currentPosition)
+				.filter((move) => generatedTour.includes(move))
+				.filter((move) => !visitedSquares.includes(move)),
+		);
+	}, [currentPosition, visitedSquares]); // currentPosition と visitedSquares が変わったときのみ実行
+
+	const moveKinght = (squareId: Position) => {
+		// すでに通った道は移動不可にする
+		if (visitedSquares.includes(squareId)) {
+			return;
+		}
+
+		if (validMoves.includes(squareId)) {
+			setCurrentPosition(squareId);
+			setVisitedSquares((prevVisited) => [...prevVisited, squareId]);
 		}
 	};
-	const handleTourGenerated = (tour: Position[]) => {
-		setCurrentTour(tour);
-		// 最初の位置を選択状態にする
-		if (tour.length > 0) {
-			setSelectedSquare(tour[0]);
-			setPossibleMoves(knightMoves(tour[0]));
-		}
+
+	const restPath = () => {
+		setCurrentPosition(generatedTour[0]);
+		setVisitedSquares([generatedTour[0]]);
 	};
+
 	return (
 		<>
-			<TourButton onTourGenerated={handleTourGenerated} />
+			<button onClick={restPath}>reset</button>
 			<div className="chessBoard">
 				{ranks.map((rank) =>
 					files.map((file, fileIndex) => {
 						const isWhite = (rank + fileIndex) % 2 === 0;
 						const squareId = `${file}${rank}` as Position;
-						const isSelected = selectedSquare === squareId;
-						const isPossibleMove = possibleMoves.includes(squareId);
+						const isSelected = currentPosition === squareId;
+						const isPossibleMove = validMoves.includes(squareId);
 
 						return (
 							<div
 								key={squareId}
-								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove && currentTour.includes(squareId) ? "possibleMove" : ""} ${currentTour.includes(squareId) ? "" : "vacant"}`}
-								onClick={() => handleClick(squareId)}
+								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove ? "possibleMove" : ""} ${generatedTour.includes(squareId) ? "" : "vacant"}`}
+								onClick={() => moveKinght(squareId)}
 							>
 								{squareId}
 							</div>
