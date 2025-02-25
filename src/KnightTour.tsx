@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChessBoard } from "./ChessBoard.tsx";
 import { type Position, makeTour } from "./main.ts";
+import "./knightTour.css";
 
 export const KnightTour = () => {
 	const [generatedTour, setGeneratedTour] = useState<Position[]>([]);
@@ -28,26 +29,27 @@ export const KnightTour = () => {
 
 	return (
 		<>
-			<button onClick={handleGenerateTour} disabled={isGenerating}>
-				{isGenerating ? "生成中..." : "ナイトツアーの生成"}
-			</button>
-			<input
-				id="number"
-				type="number"
-				value={steps}
-				onChange={handleStepsChange}
-				min="2"
-				max="32"
-			/>
-			{generatedTour.length > 0 && (
-				<button onClick={() => setShowSolution(!showSolution)}>
-					{showSolution ? "解答を隠す" : "解答を表示"}
+			<div>
+				<button onClick={handleGenerateTour} disabled={isGenerating}>
+					{isGenerating ? "生成中..." : "ナイトツアーの生成"}
 				</button>
-			)}
-			{generatedTour.length > 0 && showSolution && (
-				<div>ツアー: {generatedTour.join(" → ")}</div>
-			)}
-
+				<input
+					id="number"
+					type="number"
+					value={steps}
+					onChange={handleStepsChange}
+					min="2"
+					max="32"
+				/>
+				{generatedTour.length > 0 && (
+					<button onClick={() => setShowSolution(!showSolution)}>
+						{showSolution ? "解答を隠す" : "解答を表示"}
+					</button>
+				)}
+				{generatedTour.length > 0 && showSolution && (
+					<div className="tour">ツアー: {generatedTour.join(" → ")}</div>
+				)}
+			</div>
 			{generatedTour.length > 0 && <ChessBoard generatedTour={generatedTour} />}
 		</>
 	);

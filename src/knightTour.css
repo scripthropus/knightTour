@@ -1,0 +1,40 @@
+button {
+	background-color: #4caf50;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	margin: 4px;
+	font-size: 12px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+	background-color: #45a049;
+}
+
+input {
+	padding: 4px;
+	margin: 4px;
+	font-size: 12px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 60px;
+	text-align: center;
+}
+
+input:focus {
+	outline: none;
+	border-color: #4caf50;
+}
+
+.tour {
+	font-size: 12px;
+	font-family: bold;
+}
