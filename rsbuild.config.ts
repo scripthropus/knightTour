@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [pluginReact()],
   output: {
     distPath: {
-      root: 'public',
+      root: 'build',
     },
   },
 });
