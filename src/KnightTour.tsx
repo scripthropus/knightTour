@@ -28,8 +28,8 @@ export const KnightTour = () => {
 	};
 
 	return (
-		<>
-			<div>
+		<div className="container">
+			<div className="buttonsContainer">
 				<button onClick={handleGenerateTour} disabled={isGenerating}>
 					{isGenerating ? "生成中..." : "ナイトツアーの生成"}
 				</button>
@@ -51,6 +51,6 @@ export const KnightTour = () => {
 				)}
 			</div>
 			{generatedTour.length > 0 && <ChessBoard generatedTour={generatedTour} />}
-		</>
+		</div>
 	);
 };

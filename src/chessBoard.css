@@ -1,8 +1,11 @@
 .chessBoard {
-	width: 80vh;
-	height: 80vh;
+	width: min(80vw, 80vh); /* 画面サイズに合わせて正方形を維持 */
+	height: min(80vw, 80vh);
+	aspect-ratio: 1 / 1; /* 正方形を強制 */
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
 }
 
 .square {

@@ -3,9 +3,7 @@ import { KnightTour } from "./KnightTour.tsx";
 
 const App = () => {
 	return (
-		<>
-			<KnightTour />
-		</>
+		<KnightTour />
 	);
 };
 
