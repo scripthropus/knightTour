@@ -46,10 +46,10 @@ export const KnightTour = () => {
 						{showSolution ? "解答を隠す" : "解答を表示"}
 					</button>
 				)}
-				{generatedTour.length > 0 && showSolution && (
-					<div className="tour">ツアー: {generatedTour.join(" → ")}</div>
-				)}
 			</div>
+			{generatedTour.length > 0 && showSolution && (
+				<div className="tour">ツアー: {generatedTour.join(" → ")}</div>
+			)}
 			{generatedTour.length > 0 && <ChessBoard generatedTour={generatedTour} />}
 		</div>
 	);

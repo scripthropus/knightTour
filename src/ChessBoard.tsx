@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { Popup } from "./Popup";
 import { type Position, knightMoves } from "./main";
 import "./chessBoard.css";
 
 type ChessBoardProps = {
 	generatedTour: Position[];
 };
+
+type DisplayStatus = "hidden" | "complete" | "failed";
 
 export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 	const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -16,9 +19,10 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 	const [visitedSquares, setVisitedSquares] = useState<Position[]>([
 		generatedTour[0],
 	]);
+	const [displayState, setDisplayState] = useState<DisplayStatus>("hidden");
 
 	useEffect(() => {
-		// generatedTourが更新されたときに状態をリセット
+		setDisplayState("hidden");
 		setCurrentPosition(generatedTour[0]);
 		setValidMoves(
 			knightMoves(generatedTour[0]).filter((move) =>
@@ -26,18 +30,45 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 			),
 		);
 		setVisitedSquares([generatedTour[0]]);
-	}, [generatedTour]); // generatedTourが変更されたときにリセット
+	}, [generatedTour]);
 
 	useEffect(() => {
-		// currentPositionが変わるたびにvalidMovesを更新
 		setValidMoves(
 			knightMoves(currentPosition)
 				.filter((move) => generatedTour.includes(move))
 				.filter((move) => !visitedSquares.includes(move)),
 		);
-	}, [currentPosition, visitedSquares]); // currentPosition と visitedSquares が変わったときのみ実行
+	}, [currentPosition, visitedSquares]);
 
-	const moveKinght = (squareId: Position) => {
+	useEffect(() => {
+		if (compareArrays(generatedTour, visitedSquares)) {
+			setDisplayState("complete");
+		}
+	}, [visitedSquares, generatedTour]);
+
+	useEffect(() => {
+		if (compareArrays(generatedTour, visitedSquares)) {
+			setDisplayState("complete");
+		} else if (
+			knightMoves(currentPosition)
+				.filter((move) => generatedTour.includes(move))
+				.filter((move) => !visitedSquares.includes(move)).length === 0
+		) {
+			if (displayState !== "complete") {
+				setDisplayState("failed");
+			}
+		}
+	}, [currentPosition, visitedSquares, generatedTour]);
+
+	const compareArrays: <T>(arr1: T[], arr2: T[]) => boolean = (arr1, arr2) => {
+		if (arr1.length !== arr2.length) {
+			return false;
+		}
+
+		return arr1.every((item) => arr2.includes(item));
+	};
+
+	const moveKnight = (squareId: Position) => {
 		// すでに通った道は移動不可にする
 		if (visitedSquares.includes(squareId)) {
 			return;
@@ -47,15 +78,34 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 			setCurrentPosition(squareId);
 			setVisitedSquares((prevVisited) => [...prevVisited, squareId]);
 		}
+
+		if (compareArrays(generatedTour, visitedSquares)) {
+			setDisplayState("complete");
+		}
+		//動けるマスがない
+		if (
+			knightMoves(currentPosition)
+				.filter((move) => generatedTour.includes(move))
+				.filter((move) => !visitedSquares.includes(move)).length === 0
+		) {
+			//complete後にfailed表示をしないため
+			if (displayState === "complete") {
+				return;
+			}
+			setDisplayState("failed");
+		}
 	};
 
 	const restPath = () => {
+		setDisplayState("hidden");
 		setCurrentPosition(generatedTour[0]);
 		setVisitedSquares([generatedTour[0]]);
 	};
 
 	return (
 		<>
+			{displayState === "complete" && <Popup message={displayState} />}
+			{displayState === "failed" && <Popup message={displayState} />}
 			<button onClick={restPath}>reset</button>
 			<div className="chessBoard">
 				{ranks.map((rank) =>
@@ -69,7 +119,7 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 							<div
 								key={squareId}
 								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove ? "possibleMove" : ""} ${generatedTour.includes(squareId) ? "" : "vacant"}`}
-								onClick={() => moveKinght(squareId)}
+								onClick={() => moveKnight(squareId)}
 							>
 								{squareId}
 							</div>
