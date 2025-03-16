@@ -33,6 +33,10 @@
 	background-color: #7e8c62;
 }
 
+.visitedSquare {
+	background-color: #c85554;
+}
+
 .vacant {
 	background-color: #101725;
 }

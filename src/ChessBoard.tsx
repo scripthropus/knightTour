@@ -15,14 +15,15 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 	const [currentPosition, setCurrentPosition] = useState<Position>(
 		generatedTour[0],
 	);
-	const [validMoves, setValidMoves] = useState<Position[]>([]);
+	const [validMoves, setValidMoves] = useState<Position[]>(
+		knightMoves(currentPosition).filter((move) => generatedTour.includes(move)),
+	);
 	const [visitedSquares, setVisitedSquares] = useState<Position[]>([
 		generatedTour[0],
 	]);
 	const [displayState, setDisplayState] = useState<DisplayStatus>("hidden");
 
 	useEffect(() => {
-		setDisplayState("hidden");
 		setCurrentPosition(generatedTour[0]);
 		setValidMoves(
 			knightMoves(generatedTour[0]).filter((move) =>
@@ -30,35 +31,8 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 			),
 		);
 		setVisitedSquares([generatedTour[0]]);
+		setDisplayState(() => "hidden");
 	}, [generatedTour]);
-
-	useEffect(() => {
-		setValidMoves(
-			knightMoves(currentPosition)
-				.filter((move) => generatedTour.includes(move))
-				.filter((move) => !visitedSquares.includes(move)),
-		);
-	}, [currentPosition, visitedSquares]);
-
-	useEffect(() => {
-		if (compareArrays(generatedTour, visitedSquares)) {
-			setDisplayState("complete");
-		}
-	}, [visitedSquares, generatedTour]);
-
-	useEffect(() => {
-		if (compareArrays(generatedTour, visitedSquares)) {
-			setDisplayState("complete");
-		} else if (
-			knightMoves(currentPosition)
-				.filter((move) => generatedTour.includes(move))
-				.filter((move) => !visitedSquares.includes(move)).length === 0
-		) {
-			if (displayState !== "complete") {
-				setDisplayState("failed");
-			}
-		}
-	}, [currentPosition, visitedSquares, generatedTour]);
 
 	const compareArrays: <T>(arr1: T[], arr2: T[]) => boolean = (arr1, arr2) => {
 		if (arr1.length !== arr2.length) {
@@ -74,32 +48,40 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 			return;
 		}
 
-		if (validMoves.includes(squareId)) {
-			setCurrentPosition(squareId);
-			setVisitedSquares((prevVisited) => [...prevVisited, squareId]);
+		//移動不可
+		if (!validMoves.includes(squareId)) {
+			return;
 		}
 
-		if (compareArrays(generatedTour, visitedSquares)) {
-			setDisplayState("complete");
-		}
-		//動けるマスがない
-		if (
-			knightMoves(currentPosition)
+		setCurrentPosition(() => squareId);
+		setVisitedSquares((prevVisited) => [...prevVisited, squareId]);
+		setValidMoves(() =>
+			knightMoves(squareId)
+				.filter((move) => generatedTour.includes(move))
+				.filter((move) => !visitedSquares.includes(move)),
+		);
+
+		if (compareArrays(generatedTour, [...visitedSquares, squareId])) {
+			setDisplayState(() => "complete");
+		} else if (
+			//動けるマスがない
+			knightMoves(squareId)
 				.filter((move) => generatedTour.includes(move))
 				.filter((move) => !visitedSquares.includes(move)).length === 0
 		) {
-			//complete後にfailed表示をしないため
-			if (displayState === "complete") {
-				return;
-			}
-			setDisplayState("failed");
+			setDisplayState(() => "failed");
 		}
 	};
 
 	const restPath = () => {
 		setDisplayState("hidden");
-		setCurrentPosition(generatedTour[0]);
-		setVisitedSquares([generatedTour[0]]);
+		setCurrentPosition(() => generatedTour[0]);
+		setVisitedSquares(() => [generatedTour[0]]);
+		setValidMoves(() =>
+			knightMoves(generatedTour[0]).filter((move) =>
+				generatedTour.includes(move),
+			),
+		);
 	};
 
 	return (
@@ -114,11 +96,12 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 						const squareId = `${file}${rank}` as Position;
 						const isSelected = currentPosition === squareId;
 						const isPossibleMove = validMoves.includes(squareId);
+						const isVisited = visitedSquares.includes(squareId);
 
 						return (
 							<div
 								key={squareId}
-								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove ? "possibleMove" : ""} ${generatedTour.includes(squareId) ? "" : "vacant"}`}
+								className={`square ${isSelected ? "selectedSquare" : isWhite ? "black" : "white"} ${isPossibleMove ? "possibleMove" : ""} ${generatedTour.includes(squareId) ? "" : "vacant"} ${isVisited ? "visitedSquare" : ""}`}
 								onClick={() => moveKnight(squareId)}
 							>
 								{squareId}

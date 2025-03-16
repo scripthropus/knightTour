@@ -16,7 +16,7 @@ export const KnightTour = () => {
 		setIsGenerating(true);
 		const position = (files[Math.floor(Math.random() * files.length)] +
 			ranks[Math.floor(Math.random() * files.length)]) as Position;
-		setGeneratedTour(makeTour(steps, position));
+		setGeneratedTour(() => makeTour(steps, position));
 		setIsGenerating(false);
 	};
 
