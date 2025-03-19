@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Popup } from "./Popup";
+import { ClearAnimation } from "./ClearAnimation";
 import { type Position, knightMoves } from "./main";
 import "./chessBoard.css";
 
@@ -86,10 +86,12 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ generatedTour }) => {
 
 	return (
 		<>
-			{displayState === "complete" && <Popup message={displayState} />}
-			{displayState === "failed" && <Popup message={displayState} />}
+			{displayState === "complete" && <ClearAnimation />}
+			{displayState === "failed"}
 			<button onClick={restPath}>reset</button>
-			<div className="chessBoard">
+			<div
+				className={`chessBoard ${displayState === "failed" ? "shake-light" : ""}`}
+			>
 				{ranks.map((rank) =>
 					files.map((file, fileIndex) => {
 						const isWhite = (rank + fileIndex) % 2 === 0;
