@@ -1,7 +1,7 @@
 .chessBoard {
-	width: min(80vw, 80vh); /* 画面サイズに合わせて正方形を維持 */
+	width: min(80vw, 80vh);
 	height: min(80vw, 80vh);
-	aspect-ratio: 1 / 1; /* 正方形を強制 */
+	aspect-ratio: 1 / 1;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -55,42 +55,68 @@
 	pointer-events: none;
 }
 
-* 揺れるエフェクト */
 @keyframes shake-animation {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-3px); }
-  100% { transform: translateX(0); }
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-5px);
+	}
+	50% {
+		transform: translateX(5px);
+	}
+	75% {
+		transform: translateX(-3px);
+	}
+	100% {
+		transform: translateX(0);
+	}
 }
 
 .shake {
-  animation: shake-animation 0.3s ease-in-out;
+	animation: shake-animation 0.3s ease-in-out;
 }
 
-/* 軽い揺れ */
 @keyframes shake-light-animation {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-3px);
+	}
+	50% {
+		transform: translateX(3px);
+	}
+	75% {
+		transform: translateX(-2px);
+	}
+	100% {
+		transform: translateX(0);
+	}
 }
 
-/* 強い揺れ */
 @keyframes shake-strong-animation {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  50% { transform: translateX(8px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-8px);
+	}
+	50% {
+		transform: translateX(8px);
+	}
+	75% {
+		transform: translateX(-5px);
+	}
+	100% {
+		transform: translateX(0);
+	}
 }
 
-/* 各強度別のクラス */
 .shake-light {
-  animation: shake-light-animation 0.3s ease-in-out;
+	animation: shake-light-animation 0.3s ease-in-out;
 }
 
 .shake-strong {
-  animation: shake-strong-animation 0.3s ease-in-out;
+	animation: shake-strong-animation 0.3s ease-in-out;
 }

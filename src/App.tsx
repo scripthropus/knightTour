@@ -1,8 +1,8 @@
 import "./App.css";
-import { KnightTour } from "./KnightTour.tsx";
+import { ChessBoard } from "./ChessBoard.tsx";
 
 const App = () => {
-	return <KnightTour />;
+	return <ChessBoard />;
 };
 
 export default App;
