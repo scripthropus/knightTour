@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ClearAnimation } from "./ClearAnimation";
 import { type Position, knightMoves, makeTour } from "./main";
 import "./chessBoard.css";
-import "./KnightTourButtons.css";
+import "./knightTourButtons.css";
 
 type DisplayStatus = "hidden" | "complete" | "failed";
 
